@@ -1,0 +1,13 @@
+BEGIN TRANSACTION;
+/*####################################
+## data table
+##INSERT INTO source_meta(name,full_name,description,ref,table_source,table_mapping,table_d2g) 
+##SELECT 'GENERIF', 'NCBI GENERIF','GeneRIF provides a simple mechanism to allow scientists to add to the functional annotation of genes described in Gene.','http://www.ncbi.nlm.nih.gov/gene/about-generif','source_GENERIF','mapping_GENERIF_filter','d2g_GENERIF'
+##WHERE NOT EXISTS(SELECT 1 FROM source_meta WHERE name = 'GENERIF');
+####################################*/
+DROP TABLE IF EXISTS "source_GENERIF";
+CREATE TABLE "source_GENERIF" ("entrez_id" INTEGER, "pubmed_id" VARCHAR, "rif" TEXT);
+CREATE INDEX v1_entrez_id ON source_GENERIF (entrez_id);
+CREATE INDEX v2_pubmed_id ON source_GENERIF (pubmed_id);
+
+COMMIT;

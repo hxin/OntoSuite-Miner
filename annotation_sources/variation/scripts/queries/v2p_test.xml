@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Query>
+<Query  virtualSchemaName = "default" formatter = "TSV" header = "0" uniqueRows = "0" count = "" limitSize = "100" datasetConfigVersion = "0.6" >
+			
+	<Dataset name = "hsapiens_snp" interface = "default" >
+		<Filter name = "variation_set_name" value = "All phenotype/disease-associated variants"/>
+		<Filter name = "with_validated" excluded = "0"/>
+		<Filter name = "snp_filter" value = "rs10418277"/>
+		<Attribute name = "refsnp_id" />
+		<Attribute name = "refsnp_source" />
+		<Attribute name = "chr_name" />
+		<Attribute name = "chrom_start" />
+		<Attribute name = "allele" />
+		<Attribute name = "study_type" />
+		<Attribute name = "study_external_ref" />
+		<Attribute name = "study_description" />
+		<Attribute name = "source_name" />
+		<Attribute name = "phenotype_description" />
+		<Attribute name = "associated_variant_risk_allele" />
+		<Attribute name = "p_value" />
+	</Dataset>
+</Query>

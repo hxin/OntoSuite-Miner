@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS "d2g_GENERIF";
+CREATE TABLE "d2g_GENERIF"("entrez_id" INT,"pubmed_id" VARCHAR,"rif" TEXT,"term_id" VARCHAR,"term_name" VARCHAR,"mapping_tool" VARCHAR,"mapping_confident" INT);
+CREATE INDEX v2_d2g_GENERIF ON d2g_GENERIF (term_id);
+CREATE INDEX v3_d2g_GENERIF ON d2g_GENERIF (term_name);
+CREATE INDEX v4_d2g_GENERIF ON d2g_GENERIF (entrez_id);
+CREATE INDEX v5_d2g_GENERIF ON d2g_GENERIF (pubmed_id);
+CREATE INDEX v7_d2g_GENERIF ON d2g_GENERIF (mapping_tool);
+CREATE INDEX v6_d2g_GENERIF ON d2g_GENERIF (mapping_confident);
+
+
+INSERT INTO "d2g_GENERIF"
+select distinct t1.*,t2.term_id,lower(t2.term_name) as term_name ,t2.mapping_tool,t2.mapping_confident from source_GENERIF as t1 
+left join (select text,term_id,term_name,group_concat(mapping_tool) as mapping_tool,count(mapping_tool) as mapping_confident from mapping_GENERIF_filter
+group by text,term_id) as t2 
+on t1.rif=t2.text;
+
+REINDEX;

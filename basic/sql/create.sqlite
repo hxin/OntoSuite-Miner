@@ -1,0 +1,52 @@
+--PRAGMA writable_schema = 1; 
+--delete from sqlite_master where type = 'index';
+--PRAGMA writable_schema = 0;
+
+
+
+CREATE TABLE "entrez2ensembl" ("tax_id" INTEGER, "entrez_id" INTEGER, "ensembl_id" VARCHAR);
+CREATE INDEX v6_tax_id ON entrez2ensembl (tax_id);
+CREATE INDEX v7_entrez_id ON entrez2ensembl (entrez_id);
+CREATE INDEX v8_ensembl_id ON entrez2ensembl (ensembl_id);
+
+
+CREATE TABLE "gene_history" ("tax_id" INTEGER,"entrez_id" INTEGER DEFAULT (null) ,"discontinued_id" INTEGER,"discontinued_symbol" VARCHAR,"discontinued_date" VARCHAR);
+
+
+
+CREATE TABLE "human_gene" ("ensembl_id" VARCHAR, "entrez_id" INTEGER, "description" TEXT, "chromosome_name" VARCHAR, "start_position" INTEGER, "end_position" INTEGER);
+CREATE INDEX v9_entrez_id ON human_gene (entrez_id);
+CREATE INDEX v10_ensembl_id ON human_gene (ensembl_id);
+CREATE INDEX v11_chromosome_name ON human_gene (chromosome_name);
+CREATE INDEX v12_start_position ON human_gene (start_position);
+CREATE INDEX v12_end_position ON human_gene (end_position);
+
+
+CREATE TABLE "human_homolog" ("human" VARCHAR,"homolog" VARCHAR DEFAULT (null) ,"homolog_type" VARCHAR DEFAULT (null) ,"dn" FLOAT,"ds" FLOAT,"species" VARCHAR);
+CREATE INDEX v13_human ON human_homolog (human);
+CREATE INDEX v14_homolog ON human_homolog (homolog);
+CREATE INDEX v15_homolog_type ON human_homolog (homolog_type);
+CREATE INDEX v16_species ON human_homolog (species);
+
+CREATE TABLE "homologene" ("group_id" INTEGER,"tax_id" INTEGER ,"entrez_id" INTEGER ,"gene_symbol" VARCHAR);
+CREATE INDEX homologene_group_id ON homologene (group_id);
+CREATE INDEX homologene_tax_id ON homologene (tax_id);
+CREATE INDEX homologene_entrez_id ON homologene (entrez_id);
+CREATE INDEX homologene_gene_symbol ON homologene (gene_symbol);
+
+
+CREATE TABLE "human_variation" ("variation_id" VARCHAR, "variation_source" VARCHAR, "chromosome_name" VARCHAR, "position" INTEGER, "allele" VARCHAR);
+CREATE INDEX v17_variation_id ON human_variation (variation_id);
+CREATE INDEX v18_variation_source ON human_variation (variation_source);
+CREATE INDEX v19_chromosome_name ON human_variation (chromosome_name);
+CREATE INDEX v20_position ON human_variation (position);
+
+
+CREATE TABLE "human_variation2gene" ("variation_id" VARCHAR,"entrez_id" VARCHAR DEFAULT (null) ,"position" VARCHAR,"distance" INTEGER);
+CREATE INDEX v21_variation_id ON human_variation2gene (variation_id);
+CREATE INDEX v22_entrez_id ON human_variation2gene (entrez_id);
+CREATE INDEX v23_position ON human_variation2gene (position);
+CREATE INDEX v24_distance ON human_variation2gene (distance);
+
+
+CREATE TABLE "source_meta" ("name" VARCHAR,"full_name" VARCHAR,"description" TEXT,"ref" VARCHAR,"table_source" VARCHAR,"table_mapping" VARCHAR,"table_d2g" VARCHAR);

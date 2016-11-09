@@ -1,0 +1,57 @@
+BEGIN TRANSACTION;
+
+
+DROP TABLE IF EXISTS "human_gene2HDO";
+CREATE TABLE "human_gene2HDO" ("entrez_id" INTEGER, "term_id" VARCHAR, "source" VARCHAR, "source_count" INT, "mappting_tool" VARCHAR, "evidence" INT, "evidence_dist" VARCHAR);
+
+CREATE INDEX human_gene2HDO_term_id ON human_gene2HDO (term_id);
+CREATE INDEX human_gene2HDO_entrez_id ON human_gene2HDO (entrez_id);
+CREATE INDEX human_gene2HDO_source ON human_gene2HDO (source);
+CREATE INDEX human_gene2HDO_source_count ON human_gene2HDO (source_count);
+CREATE INDEX human_gene2HDO_mappting_tool ON human_gene2HDO (mappting_tool);
+CREATE INDEX human_gene2HDO_evidence ON human_gene2HDO (evidence);
+CREATE INDEX human_gene2HDO_evidence_dist ON human_gene2HDO (evidence_dist);
+
+insert into "human_gene2HDO"
+select t1.entrez_id,term_id, group_concat(source,',') AS source,count(distinct source) AS source_count,mapping_tool,SUM(evidence) as evidence,GROUP_CONCAT(evidence) as evidence_dist
+FROM(
+SELECT entrez_id,term_id,'o' AS source,mapping_tool ,count(mapping_tool) as evidence  FROM gene2HDO_OMIM 
+WHERE term_id != ''  group by entrez_id,term_id,mapping_tool
+UNION ALL
+SELECT entrez_id,term_id,'g' AS source,mapping_tool,count(mapping_tool) as evidence FROM gene2HDO_GENERIF
+WHERE term_id != ''  group by entrez_id,term_id,mapping_tool
+UNION ALL
+SELECT entrez_id,term_id,'v' AS source,mapping_tool,count(mapping_tool) as evidence FROM gene2HDO_VAR
+WHERE term_id != ''  group by entrez_id,term_id,mapping_tool
+) AS t1 GROUP BY t1.entrez_id,term_id,mapping_tool
+;
+REINDEX human_gene2HDO;
+
+
+DROP TABLE IF EXISTS "human_gene2HPO";
+CREATE TABLE "human_gene2HPO" ("entrez_id" INTEGER, "term_id" VARCHAR, "source" VARCHAR, "source_count" INT, "mappting_tool" VARCHAR, "evidence" INT, "evidence_dist" VARCHAR);
+
+CREATE INDEX human_gene2HPO_term_id ON human_gene2HPO (term_id);
+CREATE INDEX human_gene2HPO_entrez_id ON human_gene2HPO (entrez_id);
+CREATE INDEX human_gene2HPO_source ON human_gene2HPO (source);
+CREATE INDEX human_gene2HPO_source_count ON human_gene2HPO (source_count);
+CREATE INDEX human_gene2HPO_mappting_tool ON human_gene2HPO (mappting_tool);
+CREATE INDEX human_gene2HPO_evidence ON human_gene2HPO (evidence);
+CREATE INDEX human_gene2HPO_evidence_dist ON human_gene2HPO (evidence_dist);
+
+insert into "human_gene2HPO"
+select t1.entrez_id,term_id, group_concat(source,',') AS source,count(distinct source) AS source_count,mapping_tool,SUM(evidence) as evidence,GROUP_CONCAT(evidence) as evidence_dist
+FROM(
+SELECT entrez_id,term_id,'o' AS source,mapping_tool ,count(mapping_tool) as evidence  FROM gene2HPO_OMIM 
+WHERE term_id != ''  group by entrez_id,term_id,mapping_tool
+UNION ALL
+SELECT entrez_id,term_id,'g' AS source,mapping_tool,count(mapping_tool) as evidence FROM gene2HPO_GENERIF
+WHERE term_id != ''  group by entrez_id,term_id,mapping_tool
+UNION ALL
+SELECT entrez_id,term_id,'v' AS source,mapping_tool,count(mapping_tool) as evidence FROM gene2HPO_VAR
+WHERE term_id != ''  group by entrez_id,term_id,mapping_tool
+) AS t1 GROUP BY t1.entrez_id,term_id,mapping_tool
+;
+COMMIT;
+REINDEX human_gene2HPO;
+

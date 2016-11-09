@@ -1,0 +1,18 @@
+BEGIN TRANSACTION;
+
+
+DROP TABLE IF EXISTS "source_VAR";
+CREATE TABLE "source_VAR" ("entrez_id" INT,"relative_position" VARCHAR,"distance" VARCHAR,"variation_id" VARCHAR,  "variation_source" VARCHAR, "chromosome_name" VARCHAR, "position" INTEGER, "allele" VARCHAR, "study_type" VARCHAR, "study_external_ref" VARCHAR, "study_description" VARCHAR, "study_source" VARCHAR, "phenotype_description" TEXT, "p_value" FLOAT);
+
+CREATE INDEX v1_variation_id ON source_VAR (variation_id);
+CREATE INDEX v2_variation_source ON source_VAR (variation_source);
+CREATE INDEX v3_chromosome_name ON source_VAR (chromosome_name);
+CREATE INDEX v4_position ON source_VAR (position);
+CREATE INDEX v5_position ON source_VAR (entrez_id);
+CREATE INDEX v6_position ON source_VAR (relative_position);
+CREATE INDEX v7_position ON source_VAR (distance);
+
+
+
+
+COMMIT;
